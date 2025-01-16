@@ -1,13 +1,20 @@
 
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class IsometricCharacterController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;
+    public float dashSpeed = 10f;
+    public float dashTime = 0.2f;
+
     private CharacterController characterController;
 
     private Vector3 gravity = Vector3.zero;
+    private Vector3 direction;
 
     private float gravityScale = -10f;
 
@@ -22,7 +29,7 @@ public class IsometricCharacterController : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
 
         // Calculate direction relative to the camera
-        Vector3 direction = new Vector3(horizontal, 0, vertical);
+        direction = new Vector3(horizontal, 0, vertical);
 
         direction = Camera.main.transform.TransformDirection(direction.normalized);
 
@@ -47,6 +54,22 @@ public class IsometricCharacterController : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            StartCoroutine(Dash());
+        }
+    }
+
+    IEnumerator Dash()
+    {
+        float startTime = Time.time;
+
+        while (Time.time < startTime + dashTime)
+        {
+            characterController.Move(direction * dashSpeed * Time.deltaTime);
+
+            yield return null;
         }
     }
 }
