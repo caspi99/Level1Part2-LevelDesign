@@ -1,75 +1,100 @@
-
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Collections;
 
 public class IsometricCharacterController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float rotationSpeed = 10f;
-    public float dashSpeed = 10f;
-    public float dashTime = 0.2f;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float dashSpeed = 10f;
+    [SerializeField] private float dashTime = 0.2f;
 
     private CharacterController characterController;
-
     private Vector3 gravity = Vector3.zero;
     private Vector3 direction;
 
     private float gravityScale = -10f;
+    private bool isDashing = false;
+
+    const string idle = "Idle";
+    const string walk = "Walk";
+    [SerializeField] private Animator animator;
+    bool isWalking = false;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
-        // Calculate direction relative to the camera
-        direction = new Vector3(horizontal, 0, vertical);
-
-        direction = Camera.main.transform.TransformDirection(direction.normalized);
-
-        direction.y = 0; 
-
-
-        characterController.Move(direction * moveSpeed * Time.deltaTime);
-
-        // Apply gravity
-        if (!characterController.isGrounded)
+        if (!isDashing)
         {
-            gravity.y += gravityScale * Time.deltaTime;
-        }
-        else
-        {
-            gravity.y = 0;
-        }
-        characterController.Move(gravity * Time.deltaTime);
+            direction = new Vector3(horizontal, 0, vertical);
+            direction = Camera.main.transform.TransformDirection(direction.normalized);
+            direction.y = 0;
 
-        // Rotate character
+            if (horizontal == 0 && vertical == 0)
+            {
+                direction = Vector3.zero;
+            }
+        }
+
         if (direction != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
 
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        bool shouldWalk = direction != Vector3.zero;
+        if (shouldWalk != isWalking)
+        {
+            isWalking = shouldWalk;
+            animator.SetBool("isWalking", isWalking);
+            Debug.Log("Cambiando animación a: " + (isWalking ? "Walk" : "Idle"));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && !isDashing)
+        {
             StartCoroutine(Dash());
         }
     }
 
+    void FixedUpdate()
+    {
+        if (!isDashing)
+        {
+            characterController.Move(direction * moveSpeed * Time.fixedDeltaTime);
+        }
+
+        // Aplicar gravedad
+        if (!characterController.isGrounded)
+        {
+            gravity.y += gravityScale * Time.fixedDeltaTime;
+        }
+        else
+        {
+            gravity.y = 0f;
+        }
+        characterController.Move(gravity * Time.fixedDeltaTime);
+    }
+
     IEnumerator Dash()
     {
+        isDashing = true;
         float startTime = Time.time;
 
         while (Time.time < startTime + dashTime)
         {
             characterController.Move(direction * dashSpeed * Time.deltaTime);
-
             yield return null;
         }
+
+        direction = Vector3.zero; // Detener el movimiento inmediatamente
+        yield return new WaitForEndOfFrame(); // Esperar un frame antes de permitir movimiento
+        isDashing = false;
     }
 }
