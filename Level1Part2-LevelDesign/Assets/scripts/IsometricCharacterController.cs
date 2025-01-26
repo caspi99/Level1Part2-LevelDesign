@@ -7,6 +7,7 @@ public class IsometricCharacterController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float dashSpeed = 10f;
     [SerializeField] private float dashTime = 0.2f;
+    [SerializeField] private Vector3 initialPos = Vector3.zero;
 
     private CharacterController characterController;
     private Vector3 gravity = Vector3.zero;
@@ -28,6 +29,7 @@ public class IsometricCharacterController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         attackArea.SetActive(false);
+        initialPos = transform.position;
     }
 
     void Update()
@@ -117,5 +119,15 @@ public class IsometricCharacterController : MonoBehaviour
 
         attackArea.SetActive(false);
         isAttacking = false;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Death"))
+        {
+            characterController.enabled = false;
+            transform.position = initialPos;
+            characterController.enabled = true;
+        }
     }
 }
