@@ -110,9 +110,10 @@ public class IsometricCharacterController : MonoBehaviour
         isAttacking = true;
         direction = Vector3.zero;
         animator.SetTrigger("isAttack");
-        attackArea.SetActive(true);
 
-        yield return new WaitForSeconds(1.05f);
+        yield return new WaitForSeconds(0.20f);
+        attackArea.SetActive(true);
+        yield return new WaitForSeconds(0.85f);
 
         attackArea.SetActive(false);
         isAttacking = false;
