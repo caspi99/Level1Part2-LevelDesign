@@ -22,7 +22,6 @@ public class Elevator : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("JAJA");
         if (other.CompareTag("Player"))
         {
             playerOnPlatform = true;

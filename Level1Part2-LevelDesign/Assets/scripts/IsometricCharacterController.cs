@@ -19,11 +19,15 @@ public class IsometricCharacterController : MonoBehaviour
     const string walk = "Walk";
     [SerializeField] private Animator animator;
     bool isWalking = false;
+    bool isAttacking = false;
+
+    [SerializeField] private GameObject attackArea;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        attackArea.SetActive(false);
     }
 
     void Update()
@@ -31,7 +35,7 @@ public class IsometricCharacterController : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
-        if (!isDashing)
+        if (!isDashing && !isAttacking)
         {
             direction = new Vector3(horizontal, 0, vertical);
             direction = Camera.main.transform.TransformDirection(direction.normalized);
@@ -54,12 +58,16 @@ public class IsometricCharacterController : MonoBehaviour
         {
             isWalking = shouldWalk;
             animator.SetBool("isWalking", isWalking);
-            Debug.Log("Cambiando animación a: " + (isWalking ? "Walk" : "Idle"));
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isDashing)
+        if (Input.GetKeyDown(KeyCode.Space) && !isDashing && !isAttacking)
         {
             StartCoroutine(Dash());
+        }
+
+        if (Input.GetMouseButtonDown(0) && !isDashing && !isAttacking)
+        {
+            StartCoroutine(Attack());
         }
     }
 
@@ -70,7 +78,6 @@ public class IsometricCharacterController : MonoBehaviour
             characterController.Move(direction * moveSpeed * Time.fixedDeltaTime);
         }
 
-        // Aplicar gravedad
         if (!characterController.isGrounded)
         {
             gravity.y += gravityScale * Time.fixedDeltaTime;
@@ -93,8 +100,21 @@ public class IsometricCharacterController : MonoBehaviour
             yield return null;
         }
 
-        direction = Vector3.zero; // Detener el movimiento inmediatamente
-        yield return new WaitForEndOfFrame(); // Esperar un frame antes de permitir movimiento
+        direction = Vector3.zero;
+        yield return new WaitForEndOfFrame();
         isDashing = false;
+    }
+
+    IEnumerator Attack()
+    {
+        isAttacking = true;
+        direction = Vector3.zero;
+        animator.SetTrigger("isAttack");
+        attackArea.SetActive(true);
+
+        yield return new WaitForSeconds(1.05f);
+
+        attackArea.SetActive(false);
+        isAttacking = false;
     }
 }
