@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4260839735337684796}
   - component: {fileID: 5708950805367493467}
   - component: {fileID: 3266134379536288912}
+  - component: {fileID: 1196444602825532271}
   m_Layer: 0
   m_Name: Box Mid
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1196444602825532271
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8783273878624085251}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.016143728, y: 0.016143847, z: 0.014999997}
+  m_Center: {x: -0.000017718878, y: -0.000016729344, z: 3.2014214e-10}
