@@ -18,6 +18,7 @@ public class Elevator : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
+       
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,6 +26,7 @@ public class Elevator : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerOnPlatform = true;
+          
         }
     }
 
@@ -43,8 +45,8 @@ public class Elevator : MonoBehaviour
         if (playerOnPlatform && !isMoving)
         {
             timer += Time.deltaTime;
-
-            if(timer > waitTime)
+          
+            if (timer > waitTime)
             {
                 if (!atTop)
                 {
@@ -64,7 +66,7 @@ public class Elevator : MonoBehaviour
         isMoving = true;
         float journey = 0f;
         Vector3 initialPosition = transform.position;
-
+        
         while (journey < 1f)
         {
             journey += Time.deltaTime * speed;
