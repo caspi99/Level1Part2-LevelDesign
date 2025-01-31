@@ -37,8 +37,6 @@ public class PlatformTrigger : MonoBehaviour
             Vector3 platformMovement = (platform.position - lastPlatformPosition)*var;
             player.position += platformMovement; // Move the player with the platform
             controller.enabled = true;
-            Debug.Log(player.position);
-            Debug.Log(platformMovement.x);
             lastPlatformPosition = platform.position;
         }
     }
