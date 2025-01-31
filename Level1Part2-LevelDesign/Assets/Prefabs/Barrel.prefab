@@ -95,6 +95,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel Mid
       objectReference: {fileID: 0}
+    - target: {fileID: 8678655384486120922, guid: 255fb4ea1b4e21d49ae3296630eb844f,
+        type: 3}
+      propertyPath: m_Height
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8678655384486120922, guid: 255fb4ea1b4e21d49ae3296630eb844f,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.004
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
