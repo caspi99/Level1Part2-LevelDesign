@@ -8,7 +8,7 @@ public class PlatformTrigger : MonoBehaviour
     private bool inPlatform = false;
     public CharacterController controller;
     private Vector3 lastPlatformPosition;
-    public float var = 2f;
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -29,15 +29,15 @@ public class PlatformTrigger : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (inPlatform)
         {
-            controller.enabled = false;
-            Vector3 platformMovement = (platform.position - lastPlatformPosition)*var;
-            player.position += platformMovement; // Move the player with the platform
-            controller.enabled = true;
+            //controller.enabled = false;
+            Vector3 platformMovement = (platform.position - lastPlatformPosition);
             lastPlatformPosition = platform.position;
+            controller.Move(platformMovement);
+            //controller.enabled = true;
         }
     }
 }

@@ -7,6 +7,6 @@ public class MolinoGirar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0, velocidadRotacion * Time.deltaTime, 0);
+        transform.Rotate(0, 0, velocidadRotacion * Time.deltaTime);
     }
 }

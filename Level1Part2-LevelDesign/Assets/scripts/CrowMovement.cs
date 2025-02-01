@@ -26,8 +26,8 @@ public class CrowMovement : MonoBehaviour
         yield return new WaitForSeconds(waitSeconds);
         float journey = 0f;
         Vector3 initialPosition = crow.transform.position;
-        Debug.Log(initialPosition);
-        Debug.Log(puntoB.position);
+
+
 
         Vector3 direction = (puntoB.position - initialPosition).normalized;
         if (direction.magnitude > 0.1f)
