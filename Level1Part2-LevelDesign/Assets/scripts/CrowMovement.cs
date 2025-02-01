@@ -9,6 +9,7 @@ public class CrowMovement : MonoBehaviour
     public GameObject crow;
     public Transform puntoB;
     public float speed = 0.5f;
+    public float waitSeconds = 0.5f;
 
     // Start is called before the first frame update
     void OnTriggerEnter(Collider other) // Si es en 3D
@@ -22,7 +23,7 @@ public class CrowMovement : MonoBehaviour
 
     IEnumerator MoveCrow()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(waitSeconds);
         float journey = 0f;
         Vector3 initialPosition = crow.transform.position;
         Debug.Log(initialPosition);
